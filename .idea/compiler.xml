@@ -16,10 +16,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="ImageProcess" />
+        <module name="SerialCom" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Alpha1.0" target="11" />
       <module name="imageProcess" target="11" />
+      <module name="ImageProcess" target="11" />
+      <module name="SerialCom" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
