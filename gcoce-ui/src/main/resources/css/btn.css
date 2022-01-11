@@ -1,0 +1,10 @@
+/*JFX默认按钮*/
+.button-raised{
+    -fx-padding:0.5em 0.5em;
+    -fx-font-size:14;
+    -jfx-button-type:RAISED;
+    -fx-background-color:rgb(77, 102, 204);
+    -fx-pref-width:100;
+    -fx-text-fill:#FFFFFF;
+    -fx-spacing:0.25em;
+}
