@@ -12,19 +12,34 @@
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ImageProcess" />
-        <module name="SerialCom" />
+        <module name="gcode-web" />
+        <module name="gcoce-ui" />
+        <module name="gcode-serial" />
+        <module name="gcode-image" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Alpha1.0" target="11" />
+      <module name="gcoce-ui" target="11" />
+      <module name="gcode-image" target="11" />
+      <module name="gcode-parent" target="11" />
+      <module name="gcode-serial" target="11" />
+      <module name="gcode-ui" target="11" />
+      <module name="gcode-web" target="11" />
       <module name="imageProcess" target="11" />
-      <module name="ImageProcess" target="11" />
-      <module name="SerialCom" target="11" />
+      <module name="Layout" target="11" />
+      <module name="UerInterface" target="11" />
+      <module name="UserInterface" target="11" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="gcode-web" options="-parameters" />
+    </option>
   </component>
 </project>
