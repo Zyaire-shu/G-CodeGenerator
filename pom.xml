@@ -8,16 +8,110 @@
         <module>gcode-serial</module>
         <module>gcode-image</module>
         <module>gcode-web</module>
-        <module>gcoce-ui</module>
+        <module>gcode-ui</module>
+        <module>gcode-gcode</module>
     </modules>
 
-    <groupId>top.zyaire.gg</groupId>
+    <groupId>top.zyaire</groupId>
     <artifactId>gcode-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
-
+    <dependencies>
+        <dependency>
+            <groupId>top.zyaire</groupId>
+            <artifactId>gcode-ui</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>top.zyaire</groupId>
+            <artifactId>gcode-web</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
+<!--<build>-->
+<!--    <plugins>-->
+<!--        <plugin>-->
+<!--            <artifactId>maven-assembly-plugin</artifactId>-->
+<!--            <executions>-->
+<!--                <execution>-->
+<!--                    <phase>package</phase>-->
+<!--                    <goals>-->
+<!--                        <goal>single</goal>-->
+<!--                    </goals>-->
+<!--                </execution>-->
+<!--            </executions>-->
+
+<!--            <configuration>-->
+<!--                &lt;!&ndash; ... &ndash;&gt;-->
+<!--                <archive>-->
+<!--                    <manifest>-->
+<!--                        <mainClass>Entrance</mainClass>-->
+<!--                    </manifest>-->
+<!--                </archive>-->
+<!--                <descriptorRefs>-->
+<!--                    <descriptorRef>jar-with-dependencies</descriptorRef>-->
+<!--                </descriptorRefs>-->
+<!--            </configuration>-->
+
+<!--        </plugin>-->
+<!--        <plugin>-->
+<!--            <groupId>org.apache.maven.plugins</groupId>-->
+<!--            <artifactId>maven-jar-plugin</artifactId>-->
+<!--            <version>3.0.2</version>-->
+<!--            <configuration>-->
+<!--                <archive>-->
+<!--                    <manifest>-->
+<!--                        <addClasspath>true</addClasspath>-->
+<!--                        &lt;!&ndash; 此处为程序主入口，不带后缀 &ndash;&gt;-->
+<!--                        <mainClass>Entrance</mainClass>-->
+<!--                    </manifest>-->
+<!--                </archive>-->
+<!--            </configuration>-->
+<!--        </plugin>-->
+<!--        <plugin>-->
+<!--            <groupId>org.apache.maven.plugins</groupId>-->
+<!--            <artifactId>maven-dependency-plugin</artifactId>-->
+<!--            <executions>-->
+<!--                <execution>-->
+<!--                    <id>unpack</id>-->
+<!--                    <phase>generate-resources</phase>-->
+<!--                    <goals>-->
+<!--                        <goal>unpack</goal>-->
+<!--                    </goals>-->
+<!--                    <configuration>-->
+<!--                        <artifactItems>-->
+<!--                            <artifactItem>-->
+<!--                                <groupId>top.zyaire.gg</groupId>-->
+<!--                                <artifactId>gcode-ui</artifactId>-->
+<!--                                <version>0.0.1-SNAPSHOT</version>-->
+<!--                                <type>jar</type>-->
+<!--                                <overWrite>true</overWrite>-->
+<!--                                <outputDirectory>./target/classes</outputDirectory>-->
+<!--                            </artifactItem>-->
+<!--                            <artifactItem>-->
+<!--                                <groupId>top.zyaire.gg</groupId>-->
+<!--                                <artifactId>gcode-web</artifactId>-->
+<!--                                <version>0.0.1-SNAPSHOT</version>-->
+<!--                                <type>jar</type>-->
+<!--                                <overWrite>true</overWrite>-->
+<!--                                <outputDirectory>./target/classes</outputDirectory>-->
+<!--                            </artifactItem>-->
+<!--                        </artifactItems>-->
+<!--                    </configuration>-->
+<!--                </execution>-->
+<!--            </executions>-->
+<!--        </plugin>-->
+
+<!--    </plugins>-->
+<!--</build>-->
 
 </project>

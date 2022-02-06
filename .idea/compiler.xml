@@ -18,14 +18,16 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="gcode-web" />
-        <module name="gcoce-ui" />
         <module name="gcode-serial" />
         <module name="gcode-image" />
+        <module name="gcode-ui" />
+        <module name="gcode-gcode" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Alpha1.0" target="11" />
-      <module name="gcoce-ui" target="11" />
+      <module name="gcode-enter" target="11" />
+      <module name="gcode-gcode" target="11" />
       <module name="gcode-image" target="11" />
       <module name="gcode-parent" target="11" />
       <module name="gcode-serial" target="11" />
