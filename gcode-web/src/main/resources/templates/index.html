@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>G-Code生成程序</title>
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script>
+
+    </script>
+</head>
+<body>
+   <form  enctype="multipart/form-data" action="upload" method="post">
+       <input type="file" name="file" id="file_upload" onchange="imgChange(this)">
+       <input type="submit">
+   </form>
+   <img id="uploaded_images" src="" style="width: 200px; height: 300px;" />
+</body>
+<script type="text/javascript">
+    <!--显示需要上传图片的所路途-->
+    // 选择图片显示
+    function imgChange(obj) {
+        // 获取点击的文本框
+        var file = document.getElementById("file_upload");
+        var imgUrl = window.URL.createObjectURL(file.files[0]);
+        var img = document.getElementById('uploaded_images');
+        img.setAttribute('src', imgUrl); // 修改img标签src属性值
+    };
+
+</script>
+</html>
