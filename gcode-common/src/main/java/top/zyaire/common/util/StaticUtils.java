@@ -1,4 +1,4 @@
-package top.zyaire.serial.util;
+package top.zyaire.common.util;
 
 import java.io.File;
 
@@ -8,7 +8,8 @@ import java.io.File;
  * @Version 1.0
  */
 public class StaticUtils {
-    public static final String[] supportFormat = new String[]{"svg"};
+    public static final String[] svgFormat = new String[]{"svg"};
+    public static final String[] imgFormat = new String[]{"jpg","png","jpeg"};
     public static final String imageStoragePath = "./image/";
     public static int containKey(String []keys,String key){
         for (int i = 0; i < keys.length; i++) {

@@ -5,7 +5,9 @@ import org.springframework.web.multipart.MultipartFile;
 import top.zyaire.webview.service.ImageUploadService;
 import top.zyaire.webview.util.FileUtil;
 
-import static top.zyaire.serial.util.StaticUtils.imageStoragePath;
+import java.io.File;
+
+import static top.zyaire.common.util.StaticUtils.imageStoragePath;
 
 /**
  * @Author ZyaireShu
@@ -18,13 +20,13 @@ public class ImageUploadServiceImpl implements ImageUploadService {
     ImageUploadServiceImpl(){
     }
     @Override
-    public String upload(MultipartFile file) {
+    public boolean upload(MultipartFile file) {
         String name = file.getOriginalFilename();
         try {
             FileUtil.upload(file.getBytes(),imageStoragePath,name);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return new File(imageStoragePath+name).exists();
     }
 }

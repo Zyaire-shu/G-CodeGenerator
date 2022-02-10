@@ -4,11 +4,12 @@ package top.zyaire.gcode;
  * The Options class holds information given by the user that affect the creation of gcode file from svg.
  */
 public class Options {
-    private float moveDepth;
-    private float workDepth;
-    private String units;
-    private float feed;
-
+    private float moveDepth = 2;
+    private float workDepth = 0;
+    private Integer laserPower = 1000;//这个是M03S100中的S
+    private String units = "mm";
+    private float feed = 4000;
+    private boolean laser = true;
 
     /**
      * Instantiates a new Options.
@@ -93,5 +94,30 @@ public class Options {
         this.feed = feed;
     }
 
+    /**
+     * 判断是否是激光雕刻机，如果是的话，用M03S1000替代G0Z-1
+     * @return: boolean
+     * @date: 2022/2/8 10:47
+     */
+    public boolean isLaser() {
+        return laser;
+    }
 
+    /**
+     * 设置适用于激光雕刻
+     * @param laser:
+     * @return: void
+     * @date: 2022/2/8 10:48
+     */
+    public void setLaser(boolean laser) {
+        this.laser = laser;
+    }
+
+    public int getLaserPower() {
+        return this.laserPower;
+    }
+
+    public void setLaserPower(int laserPower) {
+        this.laserPower = laserPower;
+    }
 }

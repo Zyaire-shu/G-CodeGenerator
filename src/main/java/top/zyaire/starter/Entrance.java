@@ -2,7 +2,7 @@ package top.zyaire.starter;
 
 
 import top.zyaire.ui.UIMain;
-import top.zyaire.serial.util.StaticUtils;
+import top.zyaire.common.util.StaticUtils;
 
 
 /**

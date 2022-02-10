@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Alpha1.0.iml" filepath="$PROJECT_DIR$/Alpha1.0.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gcode-common/gcode-common.iml" filepath="$PROJECT_DIR$/gcode-common/gcode-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/gcode-gcode/gcode-gcode.iml" filepath="$PROJECT_DIR$/gcode-gcode/gcode-gcode.iml" />
       <module fileurl="file://$PROJECT_DIR$/gcode-image/gcode-image.iml" filepath="$PROJECT_DIR$/gcode-image/gcode-image.iml" />
       <module fileurl="file://$PROJECT_DIR$/gcode-serial/gcode-serial.iml" filepath="$PROJECT_DIR$/gcode-serial/gcode-serial.iml" />

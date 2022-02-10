@@ -10,6 +10,7 @@
         <module>gcode-web</module>
         <module>gcode-ui</module>
         <module>gcode-gcode</module>
+        <module>gcode-common</module>
     </modules>
 
     <groupId>top.zyaire</groupId>

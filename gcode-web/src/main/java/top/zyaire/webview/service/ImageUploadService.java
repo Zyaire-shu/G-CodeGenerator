@@ -9,5 +9,5 @@ import org.springframework.web.multipart.MultipartFile;
  * @Version 1.0
  */
 public interface ImageUploadService {
-    String upload(MultipartFile file);
+    boolean upload(MultipartFile file);
 }

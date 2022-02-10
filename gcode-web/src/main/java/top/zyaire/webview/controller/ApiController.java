@@ -1,20 +1,15 @@
 package top.zyaire.webview.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fazecast.jSerialComm.SerialPort;
-import com.fazecast.jSerialComm.SerialPortDataListener;
-import com.fazecast.jSerialComm.SerialPortEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import top.zyaire.serial.SerialConnect;
 import top.zyaire.webview.service.ImageUploadService;
-import top.zyaire.serial.util.StaticUtils;
+import top.zyaire.common.util.StaticUtils;
 import top.zyaire.webview.service.SerialPortService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
 
 /**
  * @Author ZyaireShu
@@ -35,14 +30,17 @@ public class ApiController {
     @ResponseBody
     @RequestMapping("/upload")
     public String upload(@RequestParam("file")MultipartFile file, HttpServletRequest request){
-        String format = file.getOriginalFilename();
+        String format = file.getOriginalFilename();//获取文件格式
         format = format.substring(format.lastIndexOf('.')+1);
-        int re = StaticUtils.containKey(StaticUtils.supportFormat,format);
+        int re = StaticUtils.containKey(StaticUtils.svgFormat,format);
+        JSONObject jb = new JSONObject();
         if (re==-1){
-            return "不支持的文件类型";
+            jb.put("message","不支持的文件类型");
+            return jb.toJSONString();
         }
-        imageUploadService.upload(file);
-        return "上传成功";
+        boolean isUploaded = imageUploadService.upload(file);
+        jb.put("message",isUploaded?"上传成功":"上传失败");
+        return jb.toJSONString();
     }
 
     @ResponseBody

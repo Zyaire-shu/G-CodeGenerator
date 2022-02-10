@@ -2,12 +2,11 @@ package top.zyaire.webview;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import top.zyaire.serial.util.StaticUtils;
+import top.zyaire.common.util.StaticUtils;
 
 import java.io.File;
 
-import static top.zyaire.serial.util.StaticUtils.imageStoragePath;
+import static top.zyaire.common.util.StaticUtils.imageStoragePath;
 
 @SpringBootApplication
 public class WebViewApplication {

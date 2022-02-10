@@ -17,6 +17,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="gcode-common" />
         <module name="gcode-web" />
         <module name="gcode-serial" />
         <module name="gcode-image" />
@@ -26,6 +27,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Alpha1.0" target="11" />
+      <module name="gcode-common" target="11" />
       <module name="gcode-enter" target="11" />
       <module name="gcode-gcode" target="11" />
       <module name="gcode-image" target="11" />

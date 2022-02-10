@@ -1,11 +1,14 @@
 package top.zyaire.gcode;
 
+import lombok.Data;
+
 import java.util.Locale;
 
 /**
  * The Command class represents command written to gcode file that specifies a operation on CNC-machine.
  * Command holds an enum Code and parameters (coordinates and speeds) and possibly a comment
  */
+@Data
 public class  Command {
     private Code code;
     private Float x;
@@ -14,8 +17,11 @@ public class  Command {
     private Float i;
     private Float j;
     private Float f;
+    private Integer s;
     private String comment;
-
+    private Float scale = 1f;//放大缩小倍率
+    private Float xOffset = 0f;//x移动距离
+    private Float yOffset = 0f;//y移动距离
     /**
      * Instantiates a new Command.
      *
@@ -86,11 +92,11 @@ public class  Command {
      * Instantiates a new Command.
      *
      * @param code the code
-     * @param fValue    the f
+     * @param zValue    the z
      */
-    public Command(Code code, Float fValue) {
+    public Command(Code code, Float zValue) {
         this.code = code;
-        this.f = fValue;
+        this.z = zValue;
     }
 
     /**
@@ -112,127 +118,6 @@ public class  Command {
         this.code = code;
     }
 
-    /**
-     * Gets code.
-     *
-     * @return the code
-     */
-    public Code getCode() {
-        return code;
-    }
-
-    /**
-     * Sets code.
-     *
-     * @param code the code
-     */
-    public void setCode(Code code) {
-        this.code = code;
-    }
-
-    /**
-     * Gets x.
-     *
-     * @return the x
-     */
-    public Float getX() {
-        return x;
-    }
-
-    /**
-     * Sets x.
-     *
-     * @param x the x
-     */
-    public void setX(Float x) {
-        this.x = x;
-    }
-
-    /**
-     * Gets y.
-     *
-     * @return the y
-     */
-    public Float getY() {
-        return y;
-    }
-
-    /**
-     * Sets y.
-     *
-     * @param y the y
-     */
-    public void setY(Float y) {
-        this.y = y;
-    }
-
-    /**
-     * Gets z.
-     *
-     * @return the z
-     */
-    public Float getZ() {
-        return z;
-    }
-
-    /**
-     * Sets z.
-     *
-     * @param z the z
-     */
-    public void setZ(Float z) {
-        this.z = z;
-    }
-
-    /**
-     * Gets i.
-     *
-     * @return the i
-     */
-    public Float getI() {
-        return i;
-    }
-
-    /**
-     * Sets i.
-     *
-     * @param i the
-     */
-    public void setI(Float i) {
-        this.i = i;
-    }
-
-    /**
-     * Gets j.
-     *
-     * @return the j
-     */
-    public Float getJ() {
-        return j;
-    }
-
-    /**
-     * Sets j.
-     *
-     * @param j the j
-     */
-    public void setJ(Float j) {
-        this.j = j;
-    }
-
-    /**
-     * Gets f.
-     *
-     * @return the f
-     */
-    public Float getF() { return f; }
-
-    /**
-     * Sets f.
-     *
-     * @param f the f
-     */
-    public void setF(Float f) { this.f = f; }
 
     /**
      * To string returns the command as string in the format that it is written to gcode file:
@@ -244,16 +129,31 @@ public class  Command {
         String str;
         if(code != null){
             str = code + " ";
-            if(x!=null){str+="X"+String.format(Locale.ROOT,"%.4f",x)+" ";}
-            if(y!=null){str+="Y"+String.format(Locale.ROOT,"%.4f",y)+" ";}
-            if(z!=null){str+="Z"+String.format(Locale.ROOT,"%.4f",z)+" ";}
-            if(i!=null){str+="I"+String.format(Locale.ROOT,"%.4f",i)+" ";}
-            if(j!=null){str+="J"+String.format(Locale.ROOT,"%.4f",j)+" ";}
+            if(x!=null){str+="X"+String.format(Locale.ROOT,"%.4f",(x*scale)+xOffset)+" ";}
+            if(y!=null){str+="Y"+String.format(Locale.ROOT,"%.4f",(y*scale)+yOffset)+" ";}
+            if(z!=null){str+="Z"+String.format(Locale.ROOT,"%.4f",(z*scale))+" ";}
+            if(i!=null){str+="I"+String.format(Locale.ROOT,"%.4f",(i*scale))+" ";}
+            if(j!=null){str+="J"+String.format(Locale.ROOT,"%.4f",(j*scale))+" ";}
             if(f!=null){str+="F"+f+" ";}
+            if(s!=null){str+="S"+s+" ";}
         }else{
             str = "("+comment+")";
         }
 
         return str;
+    }
+    public static Command toCut(Options options){
+        if (options.isLaser()){
+            Command down =  new Command(Code.M03);
+            down.setS(options.getLaserPower());
+            return down;
+        }
+        return new Command(Code.G01, options.getWorkDepth());
+    }
+    public static Command toRaise(Options options){
+        if (options.isLaser()){
+            return new Command(Code.M05);
+        }
+        return new Command(Code.G00, options.getMoveDepth());
     }
 }

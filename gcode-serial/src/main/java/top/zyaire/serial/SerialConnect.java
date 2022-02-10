@@ -3,7 +3,7 @@ package top.zyaire.serial;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import org.jetbrains.annotations.NotNull;
-import top.zyaire.serial.util.StaticUtils;
+import top.zyaire.common.util.StaticUtils;
 
 import java.nio.charset.StandardCharsets;
 

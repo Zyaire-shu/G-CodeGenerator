@@ -1,6 +1,7 @@
 package top.zyaire.gcode;
 
 /**
+ * 本目录参考开源项目https://github.com/koodistrom/gcodeCreator/
  * The enum Code represents codes given to cnc machines.
  */
 public enum Code {
@@ -30,4 +31,13 @@ public enum Code {
      */
     G21, //imperial//默认单位毫米
 
+    /**
+     * M03 开启激光
+     */
+    M03,
+
+    /**
+     * M05 关闭激光
+     */
+    M05
 }

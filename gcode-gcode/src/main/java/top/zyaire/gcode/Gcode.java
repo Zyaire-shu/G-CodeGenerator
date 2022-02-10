@@ -1,5 +1,7 @@
 package top.zyaire.gcode;
 
+import lombok.Data;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -10,18 +12,21 @@ import java.util.List;
  * The Gcode class represents gcode file. It holds list of commands that are printed to create the actual
  * gcode file.
  */
+@Data
 public class Gcode {
     private List<Command> commands;
     private Command currentCommand;
-    private float currentX;
-    private float currentY;
-    private float currentZ;
+    private float currentX = 0;
+    private float currentY = 0;
+    private float currentZ = 0;
     private float currentF;
     private List<Command> header;
     private List<Command> footer;
     private Options options;
     private final String fileInfo = "This file was generated with Gcode Generator";
-
+    private float scale = 0.2f;//Gcode的缩放
+    private Float xOffset = -10f;//x移动距离
+    private Float yOffset = -10f;//y移动距离
     /**
      * Instantiates a new Gcode.
      */
@@ -29,17 +34,11 @@ public class Gcode {
         commands = new LinkedList<Command>();
 
         commands.add(new Command(fileInfo));
-        currentX = 0;
-        currentY =0;
-        currentZ = 0;
         options = new Options();
-        options.setFeed(4000);
-        options.setWorkDepth(0);
-        options.setMoveDepth(2);
         header = new LinkedList<Command>();
         footer = new LinkedList<Command>();
         createDefaultHeader(options);
-        createDefaultFooter(options);
+        createDefaultFooter();
     }
 
     /**
@@ -52,11 +51,8 @@ public class Gcode {
         header = new LinkedList<Command>();
         footer = new LinkedList<Command>();
         this.options = options;
-        currentX = 0;
-        currentY =0;
-        currentZ = 0;
         createDefaultHeader(options);
-        createDefaultFooter(options);
+        createDefaultFooter();
     }
 
     public void createDefaultHeader(Options options){
@@ -67,15 +63,26 @@ public class Gcode {
         }else{
             header.add(new Command(Code.G20));
         }
-
+        Command command = new Command(Code.G00,0f,0f,options.getMoveDepth()*2);
+        command.setF(options.getFeed());
+        header.add(command);
     }
 
-    public void createDefaultFooter(Options options){
-        Command rise = new Command(Code.G00);
-        rise.setZ(getzMoveHeight());
-        footer.add(rise);
-        footer.add(new Command(Code.G00,0f,0f));
-        footer.add(new Command("%"));
+    public void createDefaultFooter(){
+        if (options.isLaser()){
+            System.out.println("激光模式");
+            Command closeLaser = new Command(Code.M05);
+            footer.add(closeLaser);
+            footer.add(new Command(Code.G00,0f,0f));
+            footer.add(new Command("%"));
+        }else {
+            System.out.println("雕刻机模式");
+            Command rise = new Command(Code.G00);
+            rise.setZ(getzMoveHeight()*2);
+            footer.add(rise);
+            footer.add(new Command(Code.G00,0f,0f));
+            footer.add(new Command("%"));
+        }
     }
 
     /**
@@ -269,13 +276,21 @@ public class Gcode {
      */
     public String commandsAsString(List<Command> commands){
         StringBuilder stringBuilder = new StringBuilder();
-
         commands.forEach(command -> {
             stringBuilder.append(command.toString()+"\n");
         });
         return stringBuilder.toString();
     }
-
+    public String modifyCommandsAsString(List<Command> commands){
+        StringBuilder stringBuilder = new StringBuilder();
+        commands.forEach(command -> {
+            command.setScale(scale);//设置Gcode的缩放，倍率
+            command.setXOffset(xOffset);
+            command.setYOffset(yOffset);
+            stringBuilder.append(command.toString()+"\n");
+        });
+        return stringBuilder.toString();
+    }
     /**
      * Returns Commands as byte array. Method is used to send the gcodefile to the front end.
      *
@@ -283,7 +298,7 @@ public class Gcode {
      */
     public byte[] commandsAsByteArray(){
         String str = commandsAsString(header);
-        str +=  commandsAsString(commands);
+        str +=  modifyCommandsAsString(commands);
         str +=  commandsAsString(footer);
         return str.getBytes();
     }
