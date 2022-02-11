@@ -3,8 +3,6 @@ package top.zyaire.webview;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import top.zyaire.serial.SerialConnect;
-import top.zyaire.webview.listener.DataListener;
 import top.zyaire.webview.service.SerialPortService;
 
 import java.util.Scanner;
@@ -22,7 +20,7 @@ public class SerialTest {
     void ss(){
 
         Scanner sc = new Scanner(System.in);
-        String [] a = serialPortService.getPortsName();
+        String [] a = serialPortService.getPortsNames();
         for (int i = 0; i < a.length; i++) {
             System.out.println(i+".端口："+a[i]);
         }

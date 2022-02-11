@@ -21,7 +21,7 @@ class WebViewApplicationTests {
     }
     @Test
     void serialTest(){
-        String[] a = serialPortService.getPortsName();
+        String[] a = serialPortService.getPortsNames();
         for (String p :a){
             System.out.println(p);
         }

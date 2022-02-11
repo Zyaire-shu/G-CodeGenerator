@@ -12,7 +12,7 @@ import java.util.Scanner;
  */
 public class ComTest {
     public static void main(String[] args) {
-        SerialConnect cn = new SerialConnect();
+        SerialConnect cn = SerialConnect.getSerialConnect();
         Scanner sc = new Scanner(System.in);
         String [] a = cn.getPortNames();
         for (int i = 0; i < a.length; i++) {

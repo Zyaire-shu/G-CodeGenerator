@@ -19,8 +19,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="gcode-common" />
     <orderEntry type="library" name="Maven: com.fazecast:jSerialComm:2.9.0" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:23.0.0" level="project" />
-    <orderEntry type="module" module-name="gcode-common" />
   </component>
 </module>

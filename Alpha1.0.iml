@@ -78,9 +78,9 @@
     <orderEntry type="library" name="Maven: org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="module" module-name="gcode-serial" />
+    <orderEntry type="module" module-name="gcode-common" />
     <orderEntry type="library" name="Maven: com.fazecast:jSerialComm:2.9.0" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:23.0.0" level="project" />
-    <orderEntry type="module" module-name="gcode-common" />
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.79" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-api:5.8.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.opentest4j:opentest4j:1.2.0" level="project" />

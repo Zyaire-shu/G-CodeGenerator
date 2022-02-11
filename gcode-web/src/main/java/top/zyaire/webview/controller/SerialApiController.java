@@ -2,7 +2,6 @@ package top.zyaire.webview.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import top.zyaire.webview.service.ImageUploadService;
@@ -17,8 +16,8 @@ import javax.servlet.http.HttpServletRequest;
  * @Version 1.0
  */
 @CrossOrigin("*")
-@Controller
-public class ApiController {
+@RestController
+public class SerialApiController {
     private ImageUploadService imageUploadService;
     private SerialPortService serialPortService;
     @Autowired
@@ -27,7 +26,7 @@ public class ApiController {
         this.serialPortService = serialPortService;
     }
 
-    @ResponseBody
+
     @RequestMapping("/upload")
     public String upload(@RequestParam("file")MultipartFile file, HttpServletRequest request){
         String format = file.getOriginalFilename();//获取文件格式
@@ -43,15 +42,15 @@ public class ApiController {
         return jb.toJSONString();
     }
 
-    @ResponseBody
+
     @RequestMapping(value = "/getPorts", method = RequestMethod.POST)
     public String getPorts(){//获取电脑上端口的api，返回COM1，COM2数组
         JSONObject jb = new JSONObject();
-        jb.put("ports",serialPortService.getPortsName());
+        jb.put("ports",serialPortService.getPortsNames());
         return jb.toJSONString();
     }
 
-    @ResponseBody
+
     @RequestMapping(value = "/connectPort", method = RequestMethod.POST)//
     public String connectPort(@RequestBody JSONObject jsonObject){
         System.out.println("收到的消息："+jsonObject.toJSONString());
@@ -63,7 +62,7 @@ public class ApiController {
         return jb.toJSONString();
     }
 
-    @ResponseBody
+
     @RequestMapping(value = "/move", method = RequestMethod.POST)//
     public String move(@RequestBody JSONObject jsonObject){
         String command = jsonObject.getString("command");//要发送的指令
@@ -72,4 +71,12 @@ public class ApiController {
         jb.put("success",false);
         return jb.toJSONString();
     }
+    @RequestMapping(value = "/disConnect", method = RequestMethod.POST)
+    public String disConnect(){
+        boolean isClosed = serialPortService.closePort();
+        JSONObject jb = new JSONObject();
+        jb.put("success",isClosed);
+        return jb.toJSONString();
+    }
+
 }

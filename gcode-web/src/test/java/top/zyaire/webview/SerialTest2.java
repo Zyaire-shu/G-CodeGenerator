@@ -20,7 +20,7 @@ public class SerialTest2 {
     void ss(){
 
         Scanner sc = new Scanner(System.in);
-        String [] a = serialPortService.getPortsName();
+        String [] a = serialPortService.getPortsNames();
         for (int i = 0; i < a.length; i++) {
             System.out.println(i+".端口："+a[i]);
         }

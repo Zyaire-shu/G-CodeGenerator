@@ -12,7 +12,7 @@ import top.zyaire.webview.service.SerialPortService;
  */
 @Service("serialPortService")
 public class SerialPortServiceImpl implements SerialPortService {
-    private SerialConnect serialConnect = new SerialConnect();//端口操作对象，封装了常用的端口操作方法
+    private final SerialConnect serialConnect = SerialConnect.getSerialConnect();//端口操作对象，封装了常用的端口操作方法
     @Override
     public boolean openPort(String port, int baudRate) {
         boolean open =  serialConnect.openPort(port,baudRate);//打开端口
@@ -33,8 +33,23 @@ public class SerialPortServiceImpl implements SerialPortService {
     }
 
     @Override
-    public String[] getPortsName() {
+    public String[] getPortsNames() {
         serialConnect.refreshPorts();//获取端口之前刷新端口
         return serialConnect.getPortNames();
+    }
+
+    @Override
+    public boolean isOpen() {
+        return serialConnect.isOpen();
+    }
+
+    @Override
+    public String getConnectedPortName() {
+        return serialConnect.getPortName();
+    }
+
+    @Override
+    public int getConnectedBaudRate() {
+        return serialConnect.getBaudRate();
     }
 }

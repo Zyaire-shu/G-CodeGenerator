@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>SVG转换G-Code</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/mdui/css/mdui.min.css}">
+    <link rel="stylesheet" th:href="@{/css/svg.css}" />
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/js/jquery.form.js}"></script>
+</head>
+<body onload="resize()" class="mdui-theme-primary-teal mdui-appbar-with-toolbar mdui-theme-accent-pink mdui-drawer-body-left">
+<header th:fragment="header" class="mdui-appbar mdui-appbar-fixed">
+    <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:" class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#left-drawer'}"><i
+                class="mdui-icon material-icons">menu</i></a>
+        <p>G-Code生成器</p>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="javascript:window.location.reload();" class="mdui-btn mdui-btn-icon"><i
+                class="mdui-icon material-icons">refresh</i></a>
+    </div>
+</header>
+<nav th:fragment="nav" class="mdui-drawer mdui-card" id="left-drawer">
+    <ul class="mdui-list mdui-card-content" mdui-collapse="{accordion: true}">
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">domain</i>
+            <a th:href="@{/}" class="mdui-list-item-content">机器设置</a>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">video_library</i>
+            <a th:href="@{/svg}" class="mdui-list-item-content">SVG</a>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">account_circle</i>
+            <a th:href="@{/edge}" class="mdui-list-item-content">边缘图</a>
+        </li>
+    </ul>
+</nav>
+<div class="mdui-container-fluid mdui-row" id="body">
+    <div id="control" class="mdui-col-md-2 mdui-col-sm-2 mdui-col-lg-2">
+        <div id="control-side">
+            <form enctype="multipart/form-data" action="http://127.0.0.1:8080/upload" method="post" id="pic-upload-form">
+                <input type="file" class="" id="file_upload" name="file" onchange="showimage(this)" accept=".svg" />
+                <!-- <input type="button" id="pic-upload-btn" class="mdui-btn  mdui-color-theme-accent" value="提交" /> -->
+            </form>
+            <img class="mdui-img-rounded mdui-shadow-24" id="uploaded_images" th:src="@{/images/pic.svg}" />
+            <div id="convert-conf">
+                <span class="explain">平滑度：</span>
+                <label class="mdui-slider mdui-slider-discrete">
+                    <input type="range" step="1" min="0" max="100" class="conf-slide-bar"/>
+                </label>
+                <button class="mdui-btn  mdui-color-theme-accent">生成</button>
+            </div>
+        </div>
+    </div>
+    <div id="preview" class="mdui-col-md-5 mdui-col-sm-4 mdui-col-lg-7">
+        <canvas id="preview-gcode">你的浏览器不支持canvas</canvas>
+    </div>
+    <div id="machine" class="mdui-col-md-5 mdui-col-sm-6 mdui-col-lg-3">
+        <div id="connection-conf">
+            <table border="0" id="connectionConfTable" class="">
+                <colgroup>
+                    <col width="30%" />
+                    <col width="30%" />
+                    <col width="30%" />
+                </colgroup>
+                <tr>
+                    <td align="right">端口：</td>
+                    <td align="left" id="port-td">
+                        <select th:if="${!isOpen}" class="mdui-select " mdui-select id=" port-select">
+
+                        </select>
+                        <select th:if="${isOpen}" class="mdui-select " mdui-select id=" port-select">
+                            <option th:value="${connectedPort}" th:text="${connectedPort}"></option>
+                        </select>
+
+                    </td>
+                    <td>
+                        <button id="refresh-ports" class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent">刷新</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">波特率：</td>
+                    <td align="left">
+                        <select th:if="${!isOpen}" class="mdui-select" mdui-select id="port-baud-rate">
+                            <option value="2400">2400</option>
+                            <option value="4800">4800</option>
+                            <option value="9600">9600</option>
+                            <option value="19200">19200</option>
+                            <option value="38400">38400</option>
+                            <option value="57600">57600</option>
+                            <option value="115200" selected="">115200</option>
+                            <option value="230400">230400</option>
+                        </select>
+                        <select th:if="${isOpen}" class="mdui-select" mdui-select id="{port-baud-rate">
+                            <option value="2400">2400</option>
+                            <option value="4800">4800</option>
+                            <option value="9600">9600</option>
+                            <option value="19200">19200</option>
+                            <option value="38400">38400</option>
+                            <option value="57600">57600</option>
+                            <option value="115200" selected="">115200</option>
+                            <option value="230400">230400</option>
+                        </select>
+                    </td>
+                    <td align="left">
+                        <button th:if="${!isOpen}" id="connect-port" class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent">连接</button>
+                        <button th:if="${isOpen}" id="dis-connect-port" class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent" >断开</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="move-setting" class="move-settings">
+            <table border="0" cellspacing="" cellpadding="">
+                <colgroup>
+                    <col width="30%" />
+                    <col width="70%" />
+                </colgroup>
+                <tr>
+                    <td align="right">步长：</td>
+                    <td><input class="mdui-shadow-24" type="number" value="10" step="10" id="step" /></td>
+                </tr>
+                <tr>
+                    <td align="right">速度：</td>
+                    <td><input class="mdui-shadow-24" type="number" value="1000" step="10" id="speed" /></td>
+                </tr>
+            </table>
+        </div>
+        <div id="id-machine-control" class="move-settings">
+            <table id="" border="0" cellspacing="" cellpadding="">
+
+                <tr align="center">
+                    <td>
+                        <button class="machine-control  mdui-btn  mdui-color-theme-accent mdui-ripple" value="设置原点">
+                            设置原点
+                        </button>
+                    </td>
+                    <td>
+                        <button class="machine-control control-btn mdui-btn  mdui-color-theme-accent mdui-ripple" value="Y+">
+                            <!-- 上 -->
+                            Y+
+                        </button>
+                    </td>
+                    <td>
+                        <button class="machine-control mdui-btn  mdui-color-theme-accent mdui-ripple" value="回到原点">
+                            回到原点
+                        </button>
+                    </td>
+                </tr>
+                <tr align="center">
+                    <td>
+                        <button class="machine-control control-btn mdui-btn  mdui-color-theme-accent mdui-ripple" value="X-">
+                            <!-- 左 -->
+                            X-
+                        </button>
+                    </td>
+                    <td>
+
+                        <button class="machine-control  control-btn mdui-btn mdui-color-theme-accent mdui-ripple" id="home" value="$H">
+                            <!-- 回坐标原点 -->
+                            <i class="mdui-icon material-icons">&#xe88a;</i>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="machine-control control-btn mdui-btn  mdui-color-theme-accent mdui-ripple" value="X+">
+                            <!-- 右 -->
+                            X+
+                        </button>
+                    </td>
+                </tr>
+                <tr align="center">
+                    <td>
+                        <button class="machine-control mdui-btn  mdui-color-theme-accent mdui-ripple" value="设置原点">
+                            设置原点
+                        </button>
+                    </td>
+                    <td>
+
+                        <button class="machine-control control-btn mdui-btn  mdui-color-theme-accent mdui-ripple" value="Y-">
+                            <!-- 下 -->
+                            Y-
+                        </button>
+                    </td>
+                    <td>
+                        <button class="machine-control mdui-btn  mdui-color-theme-accent mdui-ripple" value="设置原点">
+                            设置原点
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<script th:src="@{/mdui/js/mdui.js}"></script>
+<script th:src="@{/js/svg.js}"></script>
+<script th:src="@{/js/preview-gcode.js}"></script>
+</body>
+</html>

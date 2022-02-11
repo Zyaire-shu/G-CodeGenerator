@@ -39,5 +39,11 @@ public interface SerialPortService {
      * @date: 2022/2/4 10:43
      * @description: 获取当前计算机所有的串口的串口名
      */
-    public String[] getPortsName();
+    public String[] getPortsNames();
+
+    public boolean isOpen();
+
+    public String getConnectedPortName();
+
+    public int getConnectedBaudRate();
 }
