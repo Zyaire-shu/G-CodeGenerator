@@ -35,7 +35,7 @@ public class GcodeTest {
             Options options = new Options();
             options.setFeed(4000);
             options.setWorkDepth(0);
-            options.setMoveDepth(2);
+            options.setMoveHeight(2);
             options.setLaserPower(1000);
             options.setLaser(false);
             Gcode g = DocParser.docToGcode(doc,"test",options);
@@ -61,8 +61,8 @@ public class GcodeTest {
         System.out.println(doc.getDoctype().toString());
         System.out.println(doc.getNodeName());
         //FileConverter.printSvg(doc);
-        Gcode g = DocParser.docToGcode(doc,"test");
-        System.out.println(g);
-        g.saveToFile("C:\\Users\\ZyaireShu\\Pictures\\Saved Pictures\\纹身\\simple.txt");
+//        Gcode g = DocParser.docToGcode(doc,"test");
+//        System.out.println(g);
+//        g.saveToFile("C:\\Users\\ZyaireShu\\Pictures\\Saved Pictures\\纹身\\simple.txt");
     }
 }

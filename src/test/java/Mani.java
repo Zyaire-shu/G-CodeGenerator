@@ -1,4 +1,6 @@
 import org.junit.jupiter.api.Test;
+import top.zyaire.entities.ImageToConvert;
+
 
 import java.io.*;
 
@@ -20,5 +22,19 @@ public class Mani {
         }
         fileWriter.flush();
         fileWriter.close();
+    }
+    @Test
+    void sout(){
+        System.out.println("hello");
+    }
+    
+    @Test
+    void fileTest(){
+//        ImageToConvert a = ImageToConvert.setImageToConvert("./images/b.svg");
+//        ImageToConvert f = ImageToConvert.setImageToConvert("./images/b.svg");
+//        ImageToConvert b = ImageToConvert.getImageToConvert();
+//        ImageToConvert c = ImageToConvert.getImageToConvert();
+//        ImageToConvert d = ImageToConvert.getImageToConvert();
+//        System.out.println(d.equals(f));
     }
 }

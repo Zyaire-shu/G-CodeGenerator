@@ -3,6 +3,7 @@ package top.zyaire.utils;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,6 +48,10 @@ public class CubicBezier {
         this.c1 = controlPoint1;
         this.c2 = controlPoint2;
         this.p2 = point2;
+        //this.p1 = point1.equals(controlPoint1) ? new Vector2D(point1.getX()+1,point1.getY()+1) : point1 ;
+        //this.p2 = point2.equals(controlPoint2) ? new Vector2D(point2.getX()+1,point2.getY()+1) : point2 ;
+        //this.c1 = point1.equals(controlPoint1) ? new Vector2D(controlPoint1.getX()+1,controlPoint1.getY()+1) : controlPoint1 ;
+        //this.c2 = point2.equals(controlPoint2) ? new Vector2D(controlPoint2.getX()+1,controlPoint2.getY()+1) : controlPoint2 ;
     }
 
     /**
@@ -150,13 +155,14 @@ public class CubicBezier {
      * @return the cubic bezier
      */
     public static CubicBezier fromQuadratic(Vector2D point1, Vector2D control, Vector2D point2){
-        Vector2D p1 = point1;
-        Vector2D p2 = point2;
-
-        Vector2D c1 = point1.add((control.subtract(point1).scalarMultiply( 2/3 )));
-        Vector2D c2 = point2.add( (control.subtract(point2).scalarMultiply(2/3 )));
-        CubicBezier cb = new CubicBezier(p1, c1,c2,p2);
-        return cb;
+//        Vector2D p1 = point1;
+//        Vector2D p2 = point2;
+//
+//        Vector2D c1 = point1.add((control.subtract(point1).scalarMultiply( 2/3 )));
+//        Vector2D c2 = point2.add( (control.subtract(point2).scalarMultiply(2/3 )));
+//        CubicBezier cb = new CubicBezier(p1, c1,c2,p2);
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        return null;
     }
 
     /**

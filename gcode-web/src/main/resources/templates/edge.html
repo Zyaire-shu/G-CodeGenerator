@@ -1,171 +1,331 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="utf-8">
-  <title>图片转换G-Code</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <link rel="stylesheet" href="mdui/css/mdui.min.css">
-  <link rel="stylesheet" href="css/svg.css"/>
-  <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
-  <script th:src="@{/js/jquery.form.js}"></script>
-</head>
-<body onload="resize()" class="mdui-theme-primary-teal mdui-theme-accent-pink ">
-<div class="mdui-tab mdui-tab-full-width" mdui-tab>
-  <a href="#example4-tab1" class="mdui-ripple">机器设置</a>
-  <a href="svg" class="mdui-ripple">SVG</a>
-  <a href="edge" class="mdui-ripple mdui-tab-active" >边缘图</a>
-</div>
-<div class="mdui-container-fluid mdui-row" id="body">
-  <div id="control" class="mdui-col-md-2 mdui-col-sm-2 mdui-col-lg-2">
-    <form enctype="multipart/form-data" action="http://127.0.0.1:8080/upload" method="post" id="pic-upload-form">
-      <input type="file" class="" id="file_upload" name="file" onchange="showimage(this)" accept=".svg"/>
-      <!-- <input type="button" id="pic-upload-btn" class="mdui-btn  mdui-color-theme-accent" value="提交" /> -->
-    </form>
-    <img class="mdui-img-rounded mdui-shadow-24" id="uploaded_images" src=""/>
-    <div id="convertConf">
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>图片转换G-Code</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<link th:rel="stylesheet" rel="stylesheet" href="./css/common.css" th:href="@{/css/common.css}" />
+		<link rel="stylesheet" href="css/check-box-style.css" th:href="@{/css/check-box-style.css}" />
+		<link rel="stylesheet" type="text/css" href="css/jquery.filer.css" th:href="@{/css/jquery.filer.css}"/>
+		<link rel="stylesheet" type="text/css" href="css/themes/jquery.filer-dragdropbox-theme.css" th:href="@{/css/themes/jquery.filer-dragdropbox-theme.css}" />
+		<script src="./js/jquery/jquery-3.6.0.min.js" th:src="@{/js/jquery/jquery-3.6.0.min.js}"></script>
+		<script src="js/jquery/jquery.filer.min.js" th:src="@{/js/jquery/jquery.filer.min.js}"></script>
+		<script src="js/jquery/custom.js" th:src="@{/js/jquery/custom.js}"></script>
 
-      <label class="mdui-slider mdui-slider-discrete">
-        <span>平滑度</span>
-        <input type="range" step="1" min="0" max="100"/>
-      </label>
-      <button class="mdui-btn  mdui-color-theme-accent">生成</button>
-    </div>
-  </div>
-  <div id="preview" class="mdui-col-md-5 mdui-col-sm-4 mdui-col-lg-7">
-    <canvas id="preview-gcode">你的浏览器不支持canvas</canvas>
-  </div>
-  <div id="machine" class="mdui-col-md-5 mdui-col-sm-6 mdui-col-lg-3">
-    <div id="connectionConf">
-      <table border="0" id="connectionConfTable" class="">
-        <colgroup>
-          <col width="30%"/>
-          <col width="30%"/>
-          <col width="30%"/>
-        </colgroup>
-        <tr>
-          <td align="right">端口：</td>
-          <td align="left" id="port-td">
-            <select class="mdui-select " mdui-select id="port-select">
+	</head>
+	<body>
+		<script>
+			function changef(a){
+				a.style.height=a.scrollHeight + 'px';
+				a.style.width=a.scrollWidth + 'px';
+				a.style.posHeight = a.scrollHeight
+				console.log("a横向宽度"+a.scrollWidth);
+			};
+			function inputf(a){
+				
+			};
+		</script>
+		<div id="app">
+			<div id="web-view">
+				<div id="header">
+					<div id="navbar">
+						<div id="" class="navbar-btn menu-btn button">
+							<div id="icon">
+								<svg t="1646554439856" id="head-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+								 p-id="857" xmlns:xlink="http://www.w3.org/1999/xlink">
+									<defs>
+										<style type="text/css"></style>
+									</defs>
+									<path d="M66.488889 211.781818h891.022222c28.198788 0 50.980202-22.238384 50.980202-49.648485 0-27.397172-22.768485-49.648485-50.980202-49.648485H66.488889C38.341818 112.484848 15.508687 134.723232 15.508687 162.133333s22.833131 49.648485 50.980202 49.648485z m891.009293 248.242424H66.488889C38.277172 460.024242 15.508687 482.262626 15.508687 509.672727s22.768485 49.648485 50.980202 49.648485h891.022222c28.198788 0 50.980202-22.238384 50.980202-49.648485-0.012929-27.410101-22.923636-49.648485-50.993131-49.648485z m0 351.63798H66.488889c-28.134141 0-50.980202 22.238384-50.980202 49.648485s22.833131 49.648485 50.980202 49.648485h891.022222c28.198788 0 50.980202-22.238384 50.980202-49.648485-0.012929-27.397172-22.781414-49.648485-50.993131-49.648485z m0 0"
+									 p-id="858" fill="#FFFFFF"></path>
+								</svg>
+							</div>
+						</div>
+						<div class="describe">
+							<div>
+								<span>G-Code生成器</span>
+								<span></span>
+							</div>
+						</div>
+					</div>
+					<div id="option">
+						<div class="file-edit">
+							<div class="file-edit-btn" title="打开文件" id="open-file">
+								<div class="file-edit-icon">
+									<svg t="1646561527102" class="icon" viewBox="0 0 1163 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+									 p-id="24704" xmlns:xlink="http://www.w3.org/1999/xlink">
+										<defs>
+											<style type="text/css"></style>
+										</defs>
+										<path d="M972.334545 209.454545H698.181818v-18.152727A191.301818 191.301818 0 0 0 506.88 0H191.301818A191.301818 191.301818 0 0 0 0 191.301818v641.396364A191.301818 191.301818 0 0 0 191.301818 1024h781.032727A191.301818 191.301818 0 0 0 1163.636364 832.698182V400.756364A191.301818 191.301818 0 0 0 972.334545 209.454545zM1047.272727 832.698182A74.938182 74.938182 0 0 1 972.334545 907.636364H191.301818A74.938182 74.938182 0 0 1 116.363636 832.698182V191.301818A74.938182 74.938182 0 0 1 191.301818 116.363636h315.578182A74.938182 74.938182 0 0 1 581.818182 191.301818V209.454545h-197.818182a58.181818 58.181818 0 0 0 0 116.363637h588.334545A74.938182 74.938182 0 0 1 1047.272727 400.756364z"
+										 fill="#111111" p-id="24705"></path>
+										<path d="M325.818182 442.181818m58.181818 0l488.727273 0q58.181818 0 58.181818 58.181818l0 0q0 58.181818-58.181818 58.181819l-488.727273 0q-58.181818 0-58.181818-58.181819l0 0q0-58.181818 58.181818-58.181818Z"
+										 fill="#111111" p-id="24706"></path>
+									</svg>
+								</div>
+							</div>
+							<div class="file-edit-btn"  title="保存G-Code">
+								<div class="file-edit-icon">
+									<svg t="1646561508908" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+									 p-id="24552" xmlns:xlink="http://www.w3.org/1999/xlink">
+										<defs>
+											<style type="text/css"></style>
+										</defs>
+										<path d="M972.8 675.84a51.2 51.2 0 0 0-51.2 51.2v158.72A36.0448 36.0448 0 0 1 885.76 921.6H138.24A36.0448 36.0448 0 0 1 102.4 885.76V727.04a51.2 51.2 0 0 0-102.4 0v158.72A138.24 138.24 0 0 0 138.24 1024h747.52A138.24 138.24 0 0 0 1024 885.76V727.04a51.2 51.2 0 0 0-51.2-51.2z"
+										 fill="#111111" p-id="24553"></path>
+										<path d="M473.2928 782.336l1.6384 5.3248 2.6624 4.7104a38.0928 38.0928 0 0 0 2.048 4.096 51.6096 51.6096 0 0 0 14.1312 14.1312l4.096 2.048 4.7104 2.6624 5.3248 1.6384 4.096 2.2528a55.0912 55.0912 0 0 0 20.48 0l4.3008-1.2288 5.3248-1.6384 4.7104-2.6624 4.096-2.048a75.3664 75.3664 0 0 0 7.7824-6.3488l188.2112-188.2112a51.2 51.2 0 0 0-72.4992-72.4992L573.44 644.3008V51.2a51.2 51.2 0 0 0-102.4 0v716.8a55.7056 55.7056 0 0 0 1.024 10.0352 33.9968 33.9968 0 0 0 1.2288 4.3008z"
+										 fill="#111111" p-id="24554"></path>
+										<path d="M217.077886 576.20562m36.203867-36.203867l0 0q36.203867-36.203867 72.407734 0l89.351145 89.351144q36.203867 36.203867 0 72.407735l0 0q-36.203867 36.203867-72.407735 0l-89.351144-89.351145q-36.203867-36.203867 0-72.407734Z"
+										 fill="#111111" p-id="24555"></path>
+									</svg>
+								</div>
+							</div>
+							<div class="file-edit-btn">
+								<div class="file-edit-icon">
+									<!-- <input type="button"  value="打开文件" id="open"/> -->
+									<input type="file" id="fileupdate" style="display: none;" accept="text/txt,.gcode,.nc,.txt"/>
+								</div>
+							</div>
+						</div>
+						<div class="function-select"></div>
+						<div class="control">
+							<div class="file-edit-btn" id="preview-config-btn">
+								<span>预览设置</span>
+							</div>
+							<div class="file-edit-btn" id="machine-config-btn">
+								<span>机器控制</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="left-drawer">
+					<div>
+						<div class="layer1">
+							<div class="layer" id="convert-conf">
+								<div>
+									<div class="layer-icon">
+										<svg t="1646621700060" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+										 p-id="3413">
+											<path d="M853.333333 96c40.533333 0 74.666667 34.133333 74.666667 74.666667v682.666666c0 40.533333-34.133333 74.666667-74.666667 74.666667H170.666667c-40.533333 0-74.666667-34.133333-74.666667-74.666667V170.666667c0-40.533333 34.133333-74.666667 74.666667-74.666667h682.666666zM746.666667 469.333333c-10.666667-12.8-32-14.933333-44.8-2.133333L320 808.533333l-2.133333 2.133334c-19.2 19.2-4.266667 53.333333 23.466666 53.333333h492.8c17.066667-2.133333 29.866667-14.933333 29.866667-32v-196.266667c0-6.4-2.133333-10.666667-6.4-14.933333l-108.8-149.333333-2.133333-2.133334z m-394.666667-202.666666c-46.933333 0-85.333333 38.4-85.333333 85.333333s38.4 85.333333 85.333333 85.333333 85.333333-38.4 85.333333-85.333333-38.4-85.333333-85.333333-85.333333z"
+											 p-id="3414"></path>
+										</svg>
+									</div>
+								</div>
+								<div class="drawer-describe ">
+									<span>
+										图片参数设置
+									</span>
+								</div>
+								<div>
+									<div class="layer-icon open-trangle open-trangle-1">
+										<svg t="1646625122991" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+										 p-id="4399" width="200" height="200">
+											<path d="M482.133333 738.133333L136.533333 392.533333c-17.066667-17.066667-17.066667-42.666667 0-59.733333 8.533333-8.533333 19.2-12.8 29.866667-12.8h689.066667c23.466667 0 42.666667 19.2 42.666666 42.666667 0 10.666667-4.266667 21.333333-12.8 29.866666L541.866667 738.133333c-17.066667 17.066667-42.666667 17.066667-59.733334 0z"
+											 p-id="4400"></path>
+										</svg>
+									</div>
+								</div>
+							</div>
+							<div class="drawer-content" id="image-conf">
+								<div><input type="file" name="files[]" id="filer_input2" multiple="multiple"></div>
+								<div id="image-conf-input">
+									<div class="item">
+										<span>生成圆弧：</span>
 
-            </select>
-          </td>
-          <td>
-            <button id="refresh-ports"
-                    class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent">刷新
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td align="right">波特率：</td>
-          <td align="left">
-            <select class="mdui-select" mdui-select id="port-baud-rate">
-              <option value="2400">2400</option>
-              <option value="4800">4800</option>
-              <option value="9600">9600</option>
-              <option value="19200">19200</option>
-              <option value="38400">38400</option>
-              <option value="57600">57600</option>
-              <option value="115200" selected="">115200</option>
-              <option value="230400">230400</option>
-            </select>
-          </td>
-          <td align="left">
-            <button id="connect-port"
-                    class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent">连接
-            </button>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div id="moveSetting" class="a">
-      <table border="0" cellspacing="" cellpadding="">
-        <colgroup>
-          <col width="30%"/>
-          <col width="70%"/>
-        </colgroup>
-        <tr>
-          <td align="right">步长：</td>
-          <td><input class="mdui-shadow-24" type="number" value="10" step="10" id="step"/></td>
-        </tr>
-        <tr>
-          <td align="right">速度：</td>
-          <td><input class="mdui-shadow-24" type="number" value="1000" step="10" id="speed"/></td>
-        </tr>
-      </table>
-    </div>
-    <div id="machineControl" class="a">
-      <table id="" border="0" cellspacing="" cellpadding="">
+									</div>
+									<div class="item">
+										<input class='tgl tgl-flat' id='gen-arc' type='checkbox' checked="checked">
+										<label class='tgl-btn' for='gen-arc'></label>
+									</div>
+									<div class="item">
+										<span>阈值：</span>
+									</div>
+									<div class="item">
+										<input type="range" value="0.3" step="0.1" min="0" max="1" id="blacklevel" class="conf-slide-bar" />
+									
+									</div>
+									<div class="item">
+										<span>去除杂点：</span>
 
-        <tr align="center">
-          <td>
-            <button class="machine-control machine-control mdui-btn  mdui-color-theme-accent mdui-ripple"
-                    value="设置原点">
-              设置原点
-            </button>
-          </td>
-          <td>
-            <button class="machine-control control-btn mdui-btn  mdui-color-theme-accent mdui-ripple"
-                    value="Y+">
-              <!-- 上 -->
-              Y+
-            </button>
-          </td>
-          <td>
-            <button class="machine-control mdui-btn  mdui-color-theme-accent mdui-ripple" value="回到原点">
-              回到原点
-            </button>
-          </td>
-        </tr>
-        <tr align="center">
-          <td>
-            <button class="machine-control control-btn mdui-btn  mdui-color-theme-accent mdui-ripple"
-                    value="X-">
-              <!-- 左 -->
-              X-
-            </button>
-          </td>
-          <td>
+									</div>
+									<div class="item">
+										<input type="range" value="2" step="1" min="1" max="100" id="turdsize" class="conf-slide-bar" />
+									</div>
+									<div class="item">
+										<span>顺滑度：</span>
+									</div>
+									<div class="item">
+										<input type="range" value="1000" step="10" min="0" max="2000" id="smooth" class="conf-slide-bar" />
 
-            <button class="machine-control  control-btn mdui-btn mdui-color-theme-accent mdui-ripple"
-                    id="home" value="$H">
-              <!-- 回坐标原点 -->
-              <i class="mdui-icon material-icons">&#xe88a;</i>
-            </button>
-          </td>
-          <td>
-            <button class="machine-control control-btn mdui-btn  mdui-color-theme-accent mdui-ripple"
-                    value="X+">
-              <!-- 右 -->
-              X+
-            </button>
-          </td>
-        </tr>
-        <tr align="center">
-          <td>
-            <button class="machine-control mdui-btn  mdui-color-theme-accent mdui-ripple" value="设置原点">
-              设置原点
-            </button>
-          </td>
-          <td>
+									</div>
+									
+									<div class="item">
+										<span>激光模式：</span>
+									</div>
+									<div class="item" id="islaser-checkbox">
+										<input class='tgl tgl-flat' id='islaser' type='checkbox' checked="checked">
+										<label class='tgl-btn' for='islaser'></label>
+									</div>
+									<div class="item is-laser">
+										<span>激光强度：</span>
+									</div>
+									<div class="item is-laser">
+										<input id="laser-strength" type="range" name=""   value="1000" step="1" min="0" max="1000"/>
+									</div>
+								</div>
+								<div>
+									<button id="generate-gcode-btn" type="button"> 生成</button>
+								</div>
+							</div>
+						</div>
+					</div>
 
-            <button class="machine-control control-btn mdui-btn  mdui-color-theme-accent mdui-ripple"
-                    value="Y-">
-              <!-- 下 -->
-              Y-
-            </button>
-          </td>
-          <td>
-            <button class="machine-control mdui-btn  mdui-color-theme-accent mdui-ripple" value="设置原点">
-              设置原点
-            </button>
-          </td>
-        </tr>
-      </table>
-    </div>
-  </div>
-</div>
-<script th:src="@{/mdui/js/mdui.js}"></script>
-<script th:src="@{/js/svg.js}"></script>
-<script th:src="@{/js/preview-gcode.js}"></script>
-</body>
+					<div>
+						<div class="layer2">
+							<div class="layer" id="gcode-editor">
+								<div>
+									<div class="layer-icon">
+										<svg t="1646623153709" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+										 p-id="3569">
+											<path d="M603.733333 181.333333L386.133333 401.066667c-6.4 6.4-10.666667 14.933333-12.8 25.6l-51.2 211.2c-8.533333 38.4 23.466667 74.666667 61.866667 64l200.533333-53.333334c8.533333-2.133333 17.066667-6.4 23.466667-14.933333l234.666667-236.8V853.333333c0 40.533333-32 72.533333-70.4 74.666667H170.666667c-40.533333 0-74.666667-34.133333-74.666667-74.666667V256c0-40.533333 34.133333-74.666667 74.666667-74.666667h433.066666z"
+											 p-id="3570"></path>
+											<path d="M738.133333 147.2L435.2 448c-4.266667 4.266667-6.4 8.533333-8.533333 14.933333l-32 125.866667c-6.4 23.466667 14.933333 44.8 38.4 38.4l128-29.866667c6.4-2.133333 10.666667-4.266667 14.933333-8.533333l300.8-302.933333c38.4-38.4 38.4-102.4 0-140.8s-100.266667-38.4-138.666667 2.133333z"
+											 p-id="3571"></path>
+										</svg>
+									</div>
+								</div>
+								<div class="drawer-describe">
+									<span>
+										G-Code编辑
+									</span>
+								</div>
+								<div>
+									<div class="layer-icon open-trangle open-trangle-2">
+										<svg t="1646625122991" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+										 p-id="4399" width="200" height="200">
+											<path d="M482.133333 738.133333L136.533333 392.533333c-17.066667-17.066667-17.066667-42.666667 0-59.733333 8.533333-8.533333 19.2-12.8 29.866667-12.8h689.066667c23.466667 0 42.666667 19.2 42.666666 42.666667 0 10.666667-4.266667 21.333333-12.8 29.866666L541.866667 738.133333c-17.066667 17.066667-42.666667 17.066667-59.733334 0z"
+											 p-id="4400"></path>
+										</svg>
+									</div>
+								</div>
+							</div>
+							<div class="drawer-content" id="editor">
+								<div id="line-numbers">
+									<span class="numbers">
+										1.
+									</span>
+								</div>
+								<div id="input-area">
+									<textarea class="lined" autofocus="autofocus" id="gcode-text" wrap="off" onpropertychange="changef(this)"></textarea>
+								</div>
+								<div id="show">
+									<div class="layer-icon">
+										<svg t="1646659966765" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+										 p-id="1092">
+											<path d="M138.934673 51.457286l746.130654 447.678392-746.130654 473.407036z" fill="#85F2C6" p-id="1093"></path>
+											<path d="M133.788945 849.045226v118.351759l746.130653-473.407035-95.87007-57.524101z" fill="#6E6E96" opacity=".15"
+											 p-id="1094"></path>
+											<path d="M125.699859 73.522171l746.130654 447.678392A25.769809 25.769809 0 0 1 859.336683 499.459859a25.74408 25.74408 0 0 1 11.938091-22.044301l-746.130653 473.407035A25.718352 25.718352 0 1 1 164.663317 972.542714V51.457286a25.728643 25.728643 0 0 1-38.963458 22.064885z m27.020221 920.750955l746.130654-473.407036c7.528201-4.785528 12.051296-13.126754 11.93809-22.049447s-4.831839-17.150714-12.493829-21.740703l-746.130653-447.678392A25.723497 25.723497 0 1 0 113.20603 51.457286v921.085428a25.738935 25.738935 0 0 0 39.51405 21.730412z"
+											 fill="#6E6E96" p-id="1095"></path>
+											<path d="M164.663317 96.899216l530.982593 395.660221 62.433125-39.616965zM257.744402 770.39791L164.663317 96.899216v732.556221z"
+											 fill="#6E6E96" opacity=".15" p-id="1096"></path>
+											<path d="M257.744402 770.39791V241.849246l437.901508 250.710191L164.663317 96.899216z" fill="#FFFFFF"
+											 opacity=".39" p-id="1097"></path>
+										</svg>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="width-change">
+						<div id="machine-setting">
+
+						</div>
+					</div>
+				</div>
+
+				<div class="gcode-preview">
+					<canvas id="preview-canvas">你的浏览器不支持canvass</canvas>
+				</div>
+				<div id="right-drawer">
+					<div class="drawer-layer" id="preview-layer">
+						<div class="layer" id="show-grid-axes">
+							<div class="show-grid-axes-col" id="show-grid">
+								<h6>显示网格</h6>
+								<input class='tgl tgl-flat' id='cb4' type='checkbox' checked="checked">
+								<label class='tgl-btn' for='cb4'></label>
+							</div>
+							<div class="show-grid-axes-col" id="show-axes">
+								<h6>显示坐标轴</h6>
+								<input class='tgl tgl-flat' id='cb3' type='checkbox' checked="checked">
+								<label class='tgl-btn' for='cb3'></label>
+							</div>
+							<div class="show-grid-axes-col" id="show-g0">
+								<h6>显示空驶路径</h6>
+								<input class='tgl tgl-flat' id='cb2' type='checkbox' checked="checked">
+								<label class='tgl-btn' for='cb2'></label>
+							</div>
+						</div>
+						<div class="layer">
+							<div>
+
+							</div>
+							<div>
+
+							</div>
+						</div>
+						<div class="layer">
+
+						</div>
+					</div>
+					<div class="drawer-layer" id="machine-layer">
+						<div class="row2-col2" id="a">
+							<div>
+								端口：
+							</div>
+							<div>
+								<select  id="port-select">
+								  <option value="COM0">COM0</option>
+								</select>
+							</div>
+							<div>
+								波特率：
+							</div>
+							<div>
+								<select  id="port-baud-rate">
+								  <option value="2400">2400</option>
+								  <option value="4800">4800</option>
+								  <option value="9600">9600</option>
+								  <option value="19200">19200</option>
+								  <option value="38400">38400</option>
+								  <option value="57600">57600</option>
+								  <option value="115200" selected="">115200</option>
+								  <option value="230400">230400</option>
+								</select>
+							</div>
+						</div>
+						<div class="row2-col2" id="machine-connection">
+							<div>
+								步长：
+							</div>
+							<div>
+								<input type="number" value="10" step="10"/>
+							</div>
+							<div>
+								速度：
+							</div>
+							<div>
+								<input type="number" value="4000" step="100"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="module" src="js/three.module.js" th:type="module" th:src="@{/js/three.module.js}"></script>
+		<script type="module" src="js/OrbitControls.js" th:type="module" th:src="@{/js/OrbitControls.js}"></script>
+		<script type="module" src="js/preview-gcode.js" th:type="module" th:src="@{/js/preview-gcode.js}"></script>
+		<script type="module" src="js/common.js" th:src="@{/js/common.js}"></script>
+
+	</body>
 </html>

@@ -24,10 +24,10 @@ public class Line {
      * @param p1
      * @param p2
      */
-        public Line(Vector2D p1, Vector2D p2) {
-            this.point = p1;
-            this.slope = calculateSlope(p1, p2);
-        }
+    public Line(Vector2D p1, Vector2D p2) {
+        this.point = p1;
+        this.slope = calculateSlope(p1, p2);
+    }
 
     /**
      * Instantiates a new Line that goes through the given point and has the given slope.
@@ -36,11 +36,10 @@ public class Line {
      * @param slope the slope
      */
 
-        public Line(Vector2D P, Float slope)
-        {
-            this.point = P;
-            this.slope = slope;
-        }
+    public Line(Vector2D P, Float slope) {
+        this.point = P;
+        this.slope = slope;
+    }
 
     /**
      * Calculates the intersection point of this line and the given line.
@@ -49,32 +48,25 @@ public class Line {
      * @return the intersection point as Vector2D
      */
 
-        public Vector2D Intersection(Line l)
-        {
-            if(slope.isNaN())
-            {
-                return verticalIntersection(this, l);
-            }
-            else if(l.getSlope().isNaN())
-            {
-                return verticalIntersection(l, this);
-            }
-            else
-            {
-                float x = (float)(slope * point.getX() - l.getSlope() * l.getPoint().getX() - point.getY() + l.getPoint().getY()) / (slope - l.getSlope());
-                float y = (float)(slope * x - slope * point.getX() + point.getY());
-                return new Vector2D(x, y);
-
-            }
-        }
-
-        //checks for special cases on the intersection
-        private static Vector2D verticalIntersection(Line vl, Line l)
-        {
-            double x = vl.getPoint().getX();
-            double y = l.getSlope() * (x - l.getPoint().getX()) + l.getPoint().getY();
+    public Vector2D Intersection(Line l) {
+        if (slope.isNaN()) {
+            return verticalIntersection(this, l);
+        } else if (l.getSlope().isNaN()) {
+            return verticalIntersection(l, this);
+        } else {
+            float x = (float) (slope * point.getX() - l.getSlope() * l.getPoint().getX() - point.getY() + l.getPoint().getY()) / (slope - l.getSlope());
+            float y = (float) (slope * x - slope * point.getX() + point.getY());
             return new Vector2D(x, y);
+
         }
+    }
+
+    //checks for special cases on the intersection
+    private static Vector2D verticalIntersection(Line vl, Line l) {
+        double x = vl.getPoint().getX();
+        double y = l.getSlope() * (x - l.getPoint().getX()) + l.getPoint().getY();
+        return new Vector2D(x, y);
+    }
 
     /**
      * Create perpendicular at line to the line defined by the points. The returned line
@@ -85,37 +77,29 @@ public class Line {
      * @return the perpendicular line
      */
 
-        public static Line CreatePerpendicularAt(Vector2D p, Vector2D p1)
-        {
-            Float m = calculateSlope(p, p1);
+    public static Line CreatePerpendicularAt(Vector2D p, Vector2D p1) {
+        Float m = calculateSlope(p, p1);
 
-            if (m == 0)
-            {
-                return new Line(p, Float.NaN);
-            }
-            else if(m.isNaN())
-            {
-                return new Line(p, 0f);
-            }
-            else
-            {
-                return new Line(p, -1f / m);
-            }
+        if (m == 0) {
+            return new Line(p, Float.NaN);
+        } else if (m.isNaN()) {
+            return new Line(p, 0f);
+        } else {
+            return new Line(p, -1f / m);
         }
+    }
 
-        private static float calculateSlope(Vector2D p1, Vector2D p2)
+    private static float calculateSlope(Vector2D p1, Vector2D p2) {
+        if (Math.abs(p2.getX() - p1.getX()) < 0.0000001)
+        //if(p2.getX() == p1.getX())
         {
-            if(Math.abs(p2.getX() - p1.getX())< 0.00001)
-            {
-                return Float.NaN;
-            }
-            else
-            {
-                double y = p2.getY() - p1.getY();
-                y = Math.abs(y)<0.00001? 0:y;
-                return (float)(y / (p2.getX() - p1.getX()));
-            }
+            return Float.NaN;
+        } else {
+            double y = p2.getY() - p1.getY();
+            y = Math.abs(y) < 0.0000001 ? 0 : y;
+            return (float) (y / (p2.getX() - p1.getX()));
         }
+    }
 
     /**
      * Gets slope.

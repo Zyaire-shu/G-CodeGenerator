@@ -49,7 +49,11 @@ public class DocParser {
      * @return the gcode
      */
     public static Gcode docToGcode(Document doc, String filename) {
-        Gcode gcode = new Gcode();
+        Options a = new Options();
+        a.setLaser(false);
+        a.setMoveHeight(10);
+        a.setWorkDepth(3);
+        Gcode gcode = new Gcode(a);
         return getGcode(doc, filename, gcode);
     }
 
@@ -85,13 +89,13 @@ public class DocParser {
         if (map.getNamedItem("id") != null) {
             gcode.addCommand(new Command(map.getNamedItem("id").getNodeValue()));
         }
-        System.out.println(map.getNamedItem("d").getNodeValue());
+       // System.out.println(map.getNamedItem("d").getNodeValue());
         String str = map.getNamedItem("d").getNodeValue();
 
-        PathParser pp = new PathParser();
-        PathHandler ph = new ToGCodeHandler(gcode);
+        PathParser pp = new PathParser();//用来抓换Svg里面的path
+        PathHandler ph = new ToGCodeHandler(gcode,gcode.getOptions().getCurveAprTolerance(),gcode.getOptions().getCurveSamplingStep());
         pp.setPathHandler(ph);
-        System.out.println("路径是" + str);
+       // System.out.println("路径是" + str);
         pp.parse(str);
 
     }

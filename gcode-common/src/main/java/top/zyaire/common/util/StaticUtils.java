@@ -1,5 +1,7 @@
 package top.zyaire.common.util;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import java.io.File;
 
 /**
@@ -10,7 +12,12 @@ import java.io.File;
 public class StaticUtils {
     public static final String[] svgFormat = new String[]{"svg"};
     public static final String[] imgFormat = new String[]{"jpg","png","jpeg"};
-    public static final String imageStoragePath = "./image/";
+    public static final String imageStoragePath = "./tmp/";
+    public static final String execPath = "./bin/";
+    public static final String win32 = "win/potrace-1.16.win32/potrace.exe";
+    public static final String win64 = "win/potrace-1.16.win64/potrace.exe";
+    public static final String bmpName="bmp.bmp";
+    public static final String svgName="svg.svg";
     public static int containKey(String []keys,String key){
         for (int i = 0; i < keys.length; i++) {
             if (key.equals(keys[i])){
@@ -38,8 +45,10 @@ public class StaticUtils {
             }
         }
         //删除
-        //folder.delete();
+        folder.delete();
 
     }
-
+    public static String randomString(){
+        return RandomStringUtils.randomAlphabetic(10);
+    }
 }

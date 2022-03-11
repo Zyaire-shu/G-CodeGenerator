@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Gcode显示</title>
+    <style>
+        #gcode{
+            width: 31.25rem;
+            height: 31.25rem;
+            background-color: #eee;
+        }
+    </style>
+</head>
+<body>
+<canvas id="gcode"></canvas>
+<br />
+<input type="text" id="input"/>
+<button onclick="inputGcode()">生成</button>
+<script>
+    var can = document.getElementById("gcode");
+    var ctx=can.getContext("2d");
+    ctx.strokeStyle="#FF0000";
+    ctx.lineWidth=0.3;
+    var currentx;
+    var currenty;
+    var input = document.getElementById("input");
+    //input.addEventListener("input",inputGcode);
+    function inputGcode(){
+        let x,y,i,j;
+        let gcode =  input.value;
+        console.log(gcode);
+        let command = gcode.split(" ");
+        console.log("数组长度："+command.length)
+        switch (command[0]){
+            case "G00":
+            case "G0":
+                 x = command[1].substr(1);
+                 y = command[2].substr(1);
+                console.log("x:"+x+",y:"+y);
+                ctx.moveTo(x,y);
+                currentx = x;
+                currenty = y;
+                break;
+            case "G01":
+            case "G1":
+                 x = command[1].substr(1);
+                 y = command[2].substr(1);
+                console.log("x:"+x+",y:"+y);
+                ctx.lineTo(x,y);
+                currentx = x;
+                currenty = y;
+                break;
+            case "G02":
+            case "G2":
+                x = command[1].substr(1);
+                y = command[2].substr(1);
+                i = command[3].substr(1);
+                j = command[4].substr(1);
+                break;
+            case "G03":
+            case "G3":
+                break;
+            default:
+                console.log("not found");
+                break;
+        }
+        ctx.stroke();
+    }
+</script>
+</body>
+</html>

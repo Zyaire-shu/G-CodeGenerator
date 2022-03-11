@@ -32,7 +32,13 @@ public class ToGCodeHandler extends DefaultPathHandler {
         super();
         this.gCode = gCode;
         curveAprTolerance = 0.5f;
-        curveSamplingStep = 8;
+        curveSamplingStep = 1000;//越大生成的线条越小
+    }
+    public ToGCodeHandler(Gcode gCode, float curveAprTolerance, float curveSamplingStep) {
+        super();
+        this.gCode = gCode;
+        this.curveAprTolerance = curveAprTolerance;
+        this.curveSamplingStep = curveSamplingStep;//越大生成的线条越小
     }
     @Override
     public void startPath(){
@@ -72,6 +78,11 @@ public class ToGCodeHandler extends DefaultPathHandler {
         Vector2D c1 = new Vector2D(previousX+x1,previousY+y1);
         Vector2D c2 = new Vector2D(previousX+x2,previousY+y2);
         Vector2D p2 = new Vector2D(previousX+x,previousY+y);
+//        if (p1.equals(c1) && c2.equals(p2)){
+//            linetoRel(x,y);
+//            return;
+//        }
+
         addBezierToGcode(new CubicBezier(p1,c1,c2,p2));
 
     }
@@ -83,6 +94,10 @@ public class ToGCodeHandler extends DefaultPathHandler {
         Vector2D c1 = new Vector2D(x1,y1);
         Vector2D c2 = new Vector2D(x2,y2);
         Vector2D p2 = new Vector2D(x,y);
+//        if (p1.equals(c1) && c2.equals(p2)){
+//            linetoAbs(x,y);
+//            return;
+//        }
 
         addBezierToGcode(new CubicBezier(p1,c1,c2,p2));
 
@@ -161,19 +176,21 @@ public class ToGCodeHandler extends DefaultPathHandler {
     }
     @Override
     public void movetoAbs(float x, float y){
-        gCode.addCommand(new Command(Code.G00, null, null, gCode.getzMoveHeight()));
+        //这里要增加对是否是激光雕刻的判断，默认是激光雕刻
+        gCode.addCommand(Command.toRaise(gCode.getOptions()));
         gCode.addCommand(new Command(Code.G00, x, y));
-        gCode.addCommand(new Command(Code.G00, null, null, gCode.getzWorkHeight()));
+        gCode.addCommand(Command.toCut(gCode.getOptions()));
         setPreviousPoints();
         pathStartX = previousX;
         pathStartY = previousY;
     };
     @Override
     public void movetoRel(float x, float y){
-
-        gCode.addCommand(new Command(Code.G00, null, null, gCode.getzMoveHeight()));
+        gCode.addCommand(Command.toRaise(gCode.getOptions()));
+        //gCode.addCommand(new Command(Code.G00, null, null, gCode.getzMoveHeight()));
         gCode.addCommand(new Command(Code.G00, x+previousX, y+previousY));
-        gCode.addCommand(new Command(Code.G00, null, null, gCode.getzWorkHeight()));
+        gCode.addCommand(Command.toCut(gCode.getOptions()));
+        //gCode.addCommand(new Command(Code.G00, null, null, gCode.getzWorkHeight()));
         setPreviousPoints();
         pathStartX = previousX;
         pathStartY = previousY;
@@ -197,6 +214,10 @@ public class ToGCodeHandler extends DefaultPathHandler {
         float y = (float) arc.getEnd().getY();
         float i = (float) arc.getCenter().getX()-previousX;
         float j = (float) arc.getCenter().getY()-previousY;
+        if (Float.isNaN(x)||Float.isNaN(y)||Float.isNaN(i)||Float.isNaN(j)){
+            //System.out.println("计算失败");
+            return;
+        }
         Command cmd = new Command(code, x, y, i, j);
         gCode.addCommand(cmd);
         setPreviousPoints();
@@ -204,7 +225,7 @@ public class ToGCodeHandler extends DefaultPathHandler {
 
     private void addBezierToGcode(CubicBezier cb){
         List<BiArc> biArcs = BezierToArcs.ApproxCubicBezier(cb, curveSamplingStep, curveAprTolerance);
-
+        //System.out.println(cb);
         biArcs.forEach(biArc -> {
             addArcToGcode(biArc.getArc1());
             addArcToGcode(biArc.getArc2());

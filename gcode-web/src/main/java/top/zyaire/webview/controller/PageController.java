@@ -5,10 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
-import top.zyaire.webview.service.ImageUploadService;
+import top.zyaire.common.util.StaticUtils;
 import top.zyaire.webview.service.SerialPortService;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @Author ZyaireShu
@@ -37,8 +37,12 @@ public class PageController {
         return "svg";
     }
     @RequestMapping("/edge")
-    public String edge(Model model){
-
+    public String edge(Model model, HttpSession session){
+        session.setAttribute("tmpPath", StaticUtils.randomString()+'/');
+        System.out.println("设置session"+ (String) session.getAttribute("tmpPath"));
+//        model.addAttribute("isOpen",serialPortService.isOpen());
+//        model.addAttribute("connectedPort",serialPortService.getConnectedPortName());
+//        model.addAttribute("connectedBaudRate",serialPortService.getConnectedBaudRate());
         return "edge";
     }
 }

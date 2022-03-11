@@ -4,7 +4,6 @@ import lombok.Data;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,21 +23,20 @@ public class Gcode {
     private List<Command> footer;
     private Options options;
     private final String fileInfo = "This file was generated with Gcode Generator";
-    private float scale = 0.2f;//Gcode的缩放
-    private Float xOffset = -10f;//x移动距离
-    private Float yOffset = -10f;//y移动距离
+    private float scale = 0.01f;//Gcode的缩放
+    private Float xOffset = 0f;//x移动距离
+    private Float yOffset = 0f;//y移动距离
     /**
      * Instantiates a new Gcode.
      */
     public Gcode(){
         commands = new LinkedList<Command>();
-
         commands.add(new Command(fileInfo));
         options = new Options();
         header = new LinkedList<Command>();
         footer = new LinkedList<Command>();
         createDefaultHeader(options);
-        createDefaultFooter();
+        createDefaultFooter(options);
     }
 
     /**
@@ -52,7 +50,7 @@ public class Gcode {
         footer = new LinkedList<Command>();
         this.options = options;
         createDefaultHeader(options);
-        createDefaultFooter();
+        createDefaultFooter(options);
     }
 
     public void createDefaultHeader(Options options){
@@ -63,24 +61,31 @@ public class Gcode {
         }else{
             header.add(new Command(Code.G20));
         }
-        Command command = new Command(Code.G00,0f,0f,options.getMoveDepth()*2);
+        Command command = null;
+       if (options.isLaser()){
+           System.out.println("头激光模式");
+           command = new Command(Code.M05,0f,0f,options.getMoveHeight());
+       }else {
+           System.out.println("头雕刻机模式");
+            command = new Command(Code.G00,0f,0f,options.getMoveHeight());
+       }
         command.setF(options.getFeed());
         header.add(command);
     }
 
-    public void createDefaultFooter(){
+    public void createDefaultFooter(Options options){
         if (options.isLaser()){
-            System.out.println("激光模式");
+            System.out.println("尾激光模式");
             Command closeLaser = new Command(Code.M05);
             footer.add(closeLaser);
-            footer.add(new Command(Code.G00,0f,0f));
+            footer.add(new Command(Code.G00,0f,0f,options.getMoveHeight()));
             footer.add(new Command("%"));
         }else {
-            System.out.println("雕刻机模式");
+            System.out.println("尾雕刻机模式");
             Command rise = new Command(Code.G00);
-            rise.setZ(getzMoveHeight()*2);
+            rise.setZ(getzMoveHeight());
             footer.add(rise);
-            footer.add(new Command(Code.G00,0f,0f));
+            footer.add(new Command(Code.G00,0f,0f, options.getMoveHeight()));
             footer.add(new Command("%"));
         }
     }
@@ -211,7 +216,7 @@ public class Gcode {
      * @return the move height
      */
     public float getzMoveHeight() {
-        return options.getMoveDepth();
+        return options.getMoveHeight();
     }
 
     /**
@@ -220,7 +225,7 @@ public class Gcode {
      * @param zMoveHeight the z move height
      */
     public void setzMoveHeight(float zMoveHeight) {
-        this.options.setMoveDepth(zMoveHeight);
+        this.options.setMoveHeight(zMoveHeight);
     }
 
     /**
@@ -306,11 +311,12 @@ public class Gcode {
     public void saveToFile(String filePath){
 
         File file = new File(filePath);
+
         try {
-            OutputStream os = new FileOutputStream(file);
-            os.write(commandsAsByteArray());
-            System.out.println("File successfully wrote");
-            os.close();
+            FileOutputStream out = new FileOutputStream(filePath);
+            out.write(commandsAsByteArray());
+            out.flush();
+            out.close();
         }
         catch (Exception e) {
             System.out.println("Exception: " + e);

@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <title>SVG转换G-Code</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/mdui/css/mdui.min.css}">
-    <link rel="stylesheet" th:href="@{/css/svg.css}" />
-    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
-    <script th:src="@{/js/jquery.form.js}"></script>
+    <link rel="stylesheet" href="../static/mdui/css/mdui.min.css" th:href="@{/mdui/css/mdui.min.css}">
+    <link rel="stylesheet" href="../static/css/svg.css" th:href="@{/css/svg.css}" />
+    <script src="../static/js/jquery-3.6.0.min.js" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script src="../static/js/jquery.form.js" th:src="@{/js/jquery.form.js}"></script>
 </head>
 <body onload="resize()" class="mdui-theme-primary-teal mdui-appbar-with-toolbar mdui-theme-accent-pink mdui-drawer-body-left">
 <header th:fragment="header" class="mdui-appbar mdui-appbar-fixed">
     <div class="mdui-toolbar mdui-color-theme">
         <a href="javascript:" class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#left-drawer'}"><i
                 class="mdui-icon material-icons">menu</i></a>
-        <p>G-Code生成器</p>
+        <p>SVG</p>
         <div class="mdui-toolbar-spacer"></div>
         <a href="javascript:window.location.reload();" class="mdui-btn mdui-btn-icon"><i
                 class="mdui-icon material-icons">refresh</i></a>
@@ -39,17 +39,17 @@
 <div class="mdui-container-fluid mdui-row" id="body">
     <div id="control" class="mdui-col-md-2 mdui-col-sm-2 mdui-col-lg-2">
         <div id="control-side">
-            <form enctype="multipart/form-data" action="http://127.0.0.1:8080/upload" method="post" id="pic-upload-form">
+            <form enctype="multipart/form-data" action="http://127.0.0.1:8080/uploadSvg" method="post" id="pic-upload-form">
                 <input type="file" class="" id="file_upload" name="file" onchange="showimage(this)" accept=".svg" />
                 <!-- <input type="button" id="pic-upload-btn" class="mdui-btn  mdui-color-theme-accent" value="提交" /> -->
             </form>
-            <img class="mdui-img-rounded mdui-shadow-24" id="uploaded_images" th:src="@{/images/pic.svg}" />
+            <img class="mdui-img-rounded mdui-shadow-24" id="uploaded_images" src="../static/images/pic.svg" th:src="@{/images/pic.svg}" />
             <div id="convert-conf">
                 <span class="explain">平滑度：</span>
                 <label class="mdui-slider mdui-slider-discrete">
-                    <input type="range" step="1" min="0" max="100" class="conf-slide-bar"/>
+                    <input type="range" step="1" min="0" max="100" id="smooth" class="conf-slide-bar"/>
                 </label>
-                <button class="mdui-btn  mdui-color-theme-accent">生成</button>
+                <button id="svg-generate" class="mdui-btn  mdui-color-theme-accent">生成</button>
             </div>
         </div>
     </div>
@@ -191,8 +191,11 @@
         </div>
     </div>
 </div>
-<script th:src="@{/mdui/js/mdui.js}"></script>
-<script th:src="@{/js/svg.js}"></script>
-<script th:src="@{/js/preview-gcode.js}"></script>
+<script src="../static/mdui/js/mdui.js" th:src="@{/mdui/js/mdui.js}"></script>
+<script src="../static/js/common.js" th:src="@{/js/common.js}"></script>
+<script type="module" src="../static/js/three.module.js" th:type="module" th:src="@{/js/three.module.js}"></script>
+<script type="module" src="../static/js/OrbitControls.js" th:type="module" th:src="@{/js/OrbitControls.js}"></script>
+<script type="module" src="../static/js/preview-gcode.js" th:type="module" th:src="@{/js/preview-gcode.js}"></script>
+<script type="module" src="../static/js/svg.js" th:type="module" th:src="@{/js/svg.js}"></script>
 </body>
 </html>

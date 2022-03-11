@@ -131,7 +131,7 @@ public class  Command {
             str = code + " ";
             if(x!=null){str+="X"+String.format(Locale.ROOT,"%.4f",(x*scale)+xOffset)+" ";}
             if(y!=null){str+="Y"+String.format(Locale.ROOT,"%.4f",(y*scale)+yOffset)+" ";}
-            if(z!=null){str+="Z"+String.format(Locale.ROOT,"%.4f",(z*scale))+" ";}
+            if(z!=null){str+="Z"+String.format(Locale.ROOT,"%.4f",z)+" ";}
             if(i!=null){str+="I"+String.format(Locale.ROOT,"%.4f",(i*scale))+" ";}
             if(j!=null){str+="J"+String.format(Locale.ROOT,"%.4f",(j*scale))+" ";}
             if(f!=null){str+="F"+f+" ";}
@@ -154,6 +154,6 @@ public class  Command {
         if (options.isLaser()){
             return new Command(Code.M05);
         }
-        return new Command(Code.G00, options.getMoveDepth());
+        return new Command(Code.G00, options.getMoveHeight());
     }
 }
